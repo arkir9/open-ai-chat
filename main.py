@@ -1,7 +1,13 @@
+import os
 from openai import OpenAI
+from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
+
+# Retrieve the API key from environment variables
 openai = OpenAI(
-    api_key = "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"
+    api_key=os.getenv("OPENAI_API_KEY")
 )
 
 def get_response(user_input):
@@ -10,19 +16,18 @@ def get_response(user_input):
         "content": user_input
     }
     response = openai.chat.completions.create(
-        model = "gpt-4o-mini",
-        messages = [message]
+        model="gpt-4o-mini",
+        messages=[message]
     )
     return response.choices[0].message.content
 
- 
 def chat():
     while True:
-        user_input = input("You ")
-        if user_input == ["exit", "quit", "bye"]:
+        user_input = input("You: ")
+        if user_input.lower() in ["exit", "quit", "bye"]:
             break
         response = get_response(user_input)
-        print(f"AI: , {response}")
+        print(f"AI: {response}")
 
 if __name__ == "__main__":
     chat()
